@@ -1,0 +1,121 @@
+<html>
+ <body>
+	id <input type="text" id="id" ><p>
+	fn <input type="text" id="fn" value=""><p>
+	ln <input type="text" id="ln" value=""><p>
+	age <input type="text" id="age" value=""><p>
+
+	<input type="button" id = "AddStart" value="AddStart" onclick="AddStart()">	
+	<input type="button" id = "AddMid" value="AddMid" onclick="AddMid()">	
+	<input type="button" id = "AddEnd" value="AddEnd" onclick="AddEnd()">	
+	<br> <input type="button" id = "DelStart" value="DelStart" onclick="DelStart()">	
+	<input type="button" id = "DelMid" value="DelMid" onclick="DelMid()">	
+	<input type="button" id = "DelEnd" value="DelEnd" onclick="DelEnd()">	
+	<br> <input type="button" id = "Clear" value="Clear" onclick="Clear()">
+
+	<input type="button" id = "Save" value="Save" onclick="Save()">	
+	<input type="button" id = "Load" value="Load" onclick="Load()">	
+
+	<table id = "persons" border = "1">
+		<thead> 
+			<tr>
+				<td>Id</td>
+				<td>First name</td>
+				<td>Last name</td>
+				<td>Age</td>
+			</tr>
+		</thead>
+		<tbody>
+
+		</tbody>
+
+	</table>
+ </body>
+</html>
+
+
+<script>
+var persons = [];
+function Person(id, fn, ln, age) 
+	{
+		this.id = id;
+		this.fn = fn;
+		this.ln = ln;
+		this.age = age;
+		return this;
+	}
+	function getPerson() 
+	{
+		var id = document.getElementById('id').value;
+		var fn = document.getElementById('fn').value;
+		var ln = document.getElementById('ln').value;
+		var age = document.getElementById('age').value;
+		return new Person(id, fn, ln, age);
+	}
+	function ShowPersons() 
+	{
+		var myTable = document.getElementById('persons').getElementsByTagName('tbody')[0];
+		myTable.innerHTML = "";
+	
+		persons.forEach(function(item) 
+		{
+			var myTable = document.getElementById('persons').getElementsByTagName('tbody')[0];
+			// Insert a row in the table at the first row
+			var newRow   = myTable.insertRow(myTable.rows.length);
+			// Insert a cell in the row at index 0
+			var cellId  = newRow.insertCell(0);
+			var cellFn = newRow.insertCell(1);
+			var cellLn = newRow.insertCell(2);
+			var cellAge = newRow.insertCell(3);
+			// Append a text node to the cell
+			cellId.appendChild(document.createTextNode(item.id));
+			cellFn.appendChild(document.createTextNode(item.fn));
+			cellLn.appendChild(document.createTextNode(item.ln));
+			cellAge.appendChild(document.createTextNode(item.age));
+		});
+	}
+	function AddStart()
+	{
+		persons.unshift(getPerson());
+		ShowPersons();
+	}
+	function AddMid()
+	{
+		persons.splice(persons.length / 2, 0, getPerson());
+		ShowPersons();
+	}
+	function AddEnd()
+	{
+		persons.push(getPerson());
+		ShowPersons();
+	}
+	function DelStart()
+	{
+		persons.shift();
+		ShowPersons();
+	}
+	function DelMid()
+	{
+		persons.splice(Math.ceil(persons.length / 2 - 1), 1);
+		ShowPersons();
+	}
+	function DelEnd()
+	{
+		persons.pop();
+		ShowPersons();
+	}
+	function Clear()
+	{
+		persons = [];
+		ShowPersons();
+	}
+	function Save()
+	{
+		localStorage.setItem("persons", JSON.stringify(persons));
+	}
+	function Load()
+	{
+		persons = JSON.parse(localStorage.getItem("persons"));
+		ShowPersons();
+	}
+</script>
